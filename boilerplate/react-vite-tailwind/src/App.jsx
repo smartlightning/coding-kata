@@ -35,9 +35,8 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submit behavior
-    const postContent = { message: inputValue }; 
-    const result = await writePost(postContent);
-    console.log(result);
+    const postContent = { message: inputValue };
+    await writePost(postContent);
     setInputValue(""); // Clear the input field after submit
     // Optionally, refresh the posts list here
     await getAllPosts();
@@ -49,32 +48,42 @@ function App() {
   }
   return (
     <>
-      <div>
-        {postData.map((post, index) => (
-          <div key={index}>
-            {post.user ? (
-              <div>
-                <img src={post.user.image} alt={post.user.name} />
-                <h4>{post.user.name}</h4>
-              </div>
-            ) : null}
-            <p>{post.message}</p>
-            <small>
-              Posted at: {new Date(post.created_at).toLocaleString()}
-            </small>
-          </div>
-        ))}
-      </div>
-      <div>
-        <form onSubmit={handleSubmit}>
+      <div className="p-10 bg-gray-100 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <input
             value={inputValue}
             onChange={handleInputChange}
             type="text"
             placeholder="Write your post here"
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Submit
+          </button>
         </form>
+      </div>
+      <div className="mt-10 space-y-6">
+        {postData.map((post, index) => (
+          <div key={index} className="p-4 bg-white rounded-lg shadow-md">
+            {post.user ? (
+              <div className="flex items-center space-x-4">
+                <img
+                  src={post.user.image}
+                  alt={post.user.name}
+                  className="w-10 h-10 rounded-full"
+                />
+                <h4 className="text-lg font-semibold">{post.user.name}</h4>
+              </div>
+            ) : null}
+            <p className="mt-2">{post.message}</p>
+            <small className="block mt-2 text-gray-500">
+              Posted at: {new Date(post.created_at).toLocaleString()}
+            </small>
+          </div>
+        ))}
       </div>
     </>
   );
